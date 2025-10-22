@@ -4,9 +4,6 @@ redis-ha:
 controller:
   replicas: 1
 
-server:
-  replicas: 
-
 repoServer:
   replicas: 1
 
@@ -15,9 +12,9 @@ applicationSet:
 
 
 
-global:
-
 server:
+  service:
+    type: NodePort
   ingress:
     enabled: true
     ingressClassName: nginx

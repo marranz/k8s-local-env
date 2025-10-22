@@ -1,3 +1,5 @@
+open_argocd:
+	minikube service argocd-server -n argocd
 all: repo ns install
 repo:
 	helm repo add argo https://argoproj.github.io/argo-helm
@@ -5,7 +7,7 @@ repo:
 ns:
 	kubectl create ns argocd --dry-run=client -o yaml | kubectl apply -f -
 install:
-	helm upgrade --install -n argocd argocd argo/argo-cd  -f helm-values.yaml
+	helm upgrade --install -n argocd argocd argo/argo-cd -f helm-values.yaml
 uninstall:
 	helm uninstall -n argocd argocd 
 
