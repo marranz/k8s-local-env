@@ -9,7 +9,7 @@ spec:
   project: default
   sources:
   - repoURL: git@github.com:marranz/k8s-local-env.git
-    path: grafana-operator-v5.18.0/
+    path: charts/grafana-operator-v5.18.0/
     helm:
       valueFiles:
         - $values/management/hsk/helm/grafana-operator/helm-values.yaml
