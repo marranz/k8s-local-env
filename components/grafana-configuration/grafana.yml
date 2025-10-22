@@ -11,3 +11,5 @@ spec:
     security:
       admin_user: root
       admin_password: secret
+service:
+    type: NodePort
