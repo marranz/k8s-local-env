@@ -1,0 +1,91 @@
+
+prometheus-node-exporter:
+  enabled: true
+alertmanager:
+  enabled: false
+prometheus-pushgateway:
+  enabled: false
+
+server:
+  persistentVolume:
+    enabled: false
+
+  global:
+    external_labels:
+      prometheus_from: local
+  ingress:
+    enabled: false
+
+  securityContext:
+    runAsUser: 0
+    runAsGroup: 0
+    runAsNonRoot: false
+  service:
+    enabled: true
+  gRPC:
+    enabled: true
+  extraFlags:
+    - web.enable-lifecycle
+    - web.enable-admin-api
+    - storage.tsdb.min-block-duration=2h
+    - storage.tsdb.max-block-duration=2h
+
+
+  securityContext:
+    runAsUser: 0
+    runAsGroup: 0
+    runAsNonRoot: false
+  sidecarContainers:
+    thanos-sidecar:
+      image: quay.io/thanos/thanos:v0.31.0
+      imagePullPolicy: IfNotPresent
+      args:
+        - sidecar
+        - --prometheus.url=http://localhost:9090/
+        - --tsdb.path=/prometheus
+        - --grpc-address=[$(POD_IP)]:10901
+        - --http-address=[$(POD_IP)]:10902
+      env:
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: status.podIP
+      ports:
+        - name: http
+          containerPort: 10902
+          protocol: TCP
+        - name: grpc
+          containerPort: 10901
+          protocol: TCP
+
+extraScrapeConfigs: |
+      - job_name: 'kubernetes-pod-scrape-with-annotation'
+        # Assuming you are using Kubernetes service discovery
+        kubernetes_sd_configs:
+          - role: pod
+
+        relabel_configs:
+          # Step 1: Filter targets based on 'prometheus.io/auto_scrape: true' annotation
+          # This regex matches the annotation key and captures its value.
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+            regex: 'true' # Matches only if the annotation value is 'true'
+            action: keep # Keep the target if the regex matches
+
+          - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+            regex: "([^:]+)(?::\\d+)?;(\\d+)"
+            replacement: '$1:$2' # Rewrites __address__ to use the annotated port
+            target_label: __address__
+            action: replace # Replace the __address__ label
+
+
+
+          # Add the Pod Name as a new label called 'pod_name'
+          - source_labels: [__meta_kubernetes_pod_name]
+            target_label: pod_name
+            action: replace
+
+          # Add other useful Kubernetes metadata as labels (optional but recommended)
+          - source_labels: [__meta_kubernetes_namespace]
+            target_label: kubernetes_namespace
+            action: replace
