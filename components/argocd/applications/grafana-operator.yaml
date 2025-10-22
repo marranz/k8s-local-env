@@ -12,7 +12,7 @@ spec:
     path: charts/grafana-operator-v5.18.0/
     helm:
       valueFiles:
-        - $values/management/hsk/helm/grafana-operator/helm-values.yaml
+        - $values/component/grafana-operator/helm-values.yaml
 
 
 
