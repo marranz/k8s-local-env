@@ -3,10 +3,11 @@ kind: PersistentVolume
 metadata:
   name: grafana
 spec:
+  storageClassName: default
   accessModes:
     - ReadWriteMany
   capacity:
-    storage: 5Gi
+    storage: 10Gi
   hostPath:
     path: /data/grafana/
 ---
@@ -16,6 +17,7 @@ metadata:
   name: grafana
   namespace: grafana
 spec:
+  storageClassName: default
   accessModes:
   - ReadWriteMany
   resources:
