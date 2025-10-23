@@ -2,6 +2,7 @@ apiVersion: grafana.integreatly.org/v1beta1
 kind: Grafana
 metadata:
   name: grafana
+  namespace: grafana
   labels:
     dashboards: "grafana"
 spec:
@@ -10,6 +11,4 @@ spec:
       mode: "console"
     security:
       admin_user: root
-      admin_password: secret
-service:
-    type: NodePort
+      admin_password: secret  

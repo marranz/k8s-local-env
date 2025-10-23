@@ -13,8 +13,8 @@ applicationSet:
 
 
 server:
-  service:
-    type: NodePort
+#  service:
+#    type: NodePort
   ingress:
     enabled: true
     ingressClassName: nginx
