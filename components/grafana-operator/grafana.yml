@@ -7,19 +7,19 @@ metadata:
     dashboards: "grafana"
 spec:
   deployment:
+    spec:
       template:
         spec:
           volumes:
-            - name: grafana-storage
+            - name: grafana-storage 
               persistentVolumeClaim:
+                claimName: grafana-pvc            
           containers:
             - name: grafana
               volumeMounts:
-                - name: grafana-storage
-                  mountPath: /var/lib/grafana
+                - name: grafana-storage 
+                  mountPath: /var/lib/grafana                  
   config:
     log:
       mode: "console"
-    security:
-      admin_user: root
-      admin_password: secret  
+      level: "info"
