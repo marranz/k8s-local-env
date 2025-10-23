@@ -6,6 +6,17 @@ metadata:
   labels:
     dashboards: "grafana"
 spec:
+  deployment:
+      template:
+        spec:
+          volumes:
+            - name: grafana-storage
+              persistentVolumeClaim:
+          containers:
+            - name: grafana
+              volumeMounts:
+                - name: grafana-storage
+                  mountPath: /var/lib/grafana
   config:
     log:
       mode: "console"
