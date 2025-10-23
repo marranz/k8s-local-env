@@ -11,7 +11,7 @@ spec:
 
 
   - repoURL: git@github.com:marranz/k8s-local-env.git
-    path: charts/grafana-operator-v5.18.0/
+    path: charts/grafana-operator-v5.20.0/
     helm:
       valueFiles:
         - $values/components/grafana-operator/helm-values.yaml
