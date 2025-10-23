@@ -1,4 +1,4 @@
-all: repo ns install
+all: repo ns install deploy_applications
 repo:
 	helm repo add argo https://argoproj.github.io/argo-helm
 	helm repo update
@@ -11,7 +11,7 @@ uninstall:
 
 get_password:
 	kubectl -n argocd get secret argocd-initial-admin-secret -o json|jq .data.password -r|base64 -d;echo
-deploy_applications:
+deploy_applications: create-repo-secret
 	kubectl apply -f ../../components/argocd/applications/
 create-repo-secret:
 	kubectl create secret generic my-ssh-key-secret  --from-file=sshPrivateKey=$$HOME/.ssh/id_rsa  --namespace=argocd --from-literal=type=git --from-literal=url=git@github.com:marranz/k8s-local-env.git
