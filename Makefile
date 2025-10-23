@@ -8,3 +8,5 @@ argocd_password:
 
 open_grafana:
 	minikube service grafana-service -n grafana
+open_prometheus:
+	minikube service prometheus-server -n prometheus
